@@ -1,11 +1,13 @@
 "use client";
 import { useState, useRef } from "react";
 import html2canvas from "html2canvas";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const imageContainerRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
@@ -22,28 +24,24 @@ export default function Home() {
     }
   };
 
-  const removeImage = () => {
-    setImage(null);
-  };
-
-  const downloadImage = async () => {
+  const generateImage = async () => {
     if (imageContainerRef.current) {
       const canvas = await html2canvas(imageContainerRef.current, {
         backgroundColor: null,
       });
-      const link = document.createElement("a");
-      link.href = canvas.toDataURL("image/png");
-      link.download = "profile_with_overlay.png";
-      link.click();
+      const imageData = canvas.toDataURL("image/png");
+      sessionStorage.setItem("generatedImage", imageData);
+      router.push("/success");
     }
   };
 
+  const removeImage = () => setImage(null);
+
   return (
     <div className="flex flex-col">
-      {/* Top Section */}
       <div className="mb-8">
         <h2 className="text-3xl sm:text-5xl font-bold text-gray-900 mb-4">
-          #Raising frame
+          #Raising F(r)ame
         </h2>
         <p className="text-base sm:text-2xl text-gray-500 mb-8">
           let VCs know you're raising. close rounds faster.
@@ -68,11 +66,10 @@ export default function Home() {
             <polyline points="17 8 12 3 7 8" />
             <line x1="12" x2="12" y1="3" y2="15" />
           </svg>
-          upload profile pic
+          Upload profile pic
         </button>
       </div>
 
-      {/* Bottom Section (Images) */}
       <div className="max-w-lg mx-auto">
         <div className="flex flex-col gap-8">
           <img
@@ -88,17 +85,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Modal */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-start md:items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-6 z-50"
           onClick={closeModal}
         >
           <div
-            className="max-h-[90vh] overflow-y-auto flex flex-col bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 relative"
+            className="max-h-[95vh] w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-300"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
             <button
               onClick={closeModal}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl"
@@ -106,14 +101,13 @@ export default function Home() {
               &times;
             </button>
 
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              1. Upload Profile Picture
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+              Upload Profile Picture
             </h3>
 
-            {/* Upload Section */}
             {!image ? (
               <div
-                className="bg-gray-100 p-6 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+                className="bg-gray-100 h-60 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer transition hover:border-gray-400"
                 onClick={() => document.getElementById("fileInput")?.click()}
               >
                 <input
@@ -125,19 +119,21 @@ export default function Home() {
                 />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-12 h-12 text-gray-400"
-                  fill="none"
+                  width="48"
+                  height="48"
                   viewBox="0 0 24 24"
+                  fill="none"
                   stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-gray-400"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 15a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4M12 3v12"
-                  />
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15l-5-5L5 21" />
                 </svg>
-                <p className="text-gray-600 mt-2">Click to upload</p>
+                <p className="text-gray-600 mt-2 text-sm">Browse to upload</p>
               </div>
             ) : (
               <div className="flex flex-col items-center">
@@ -156,24 +152,21 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
                 </div>
-
-                {/* Remove Button */}
                 <button
                   onClick={removeImage}
-                  className="mt-4 text-red-500 text-sm underline hover:text-red-700"
+                  className="mt-4 text-red-500 text-sm hover:text-red-700"
                 >
                   ✖ Remove
                 </button>
               </div>
             )}
 
-            {/* Download Button */}
             {image && (
               <button
-                onClick={downloadImage}
-                className="w-full mt-4 bg-gray-900 text-white py-3 rounded-md font-bold hover:bg-gray-800 transition"
+                onClick={generateImage}
+                className="w-full mt-6 bg-gray-900 text-white py-4 rounded-md font-bold hover:bg-gray-800 transition"
               >
-                Download Image
+                Generate
               </button>
             )}
           </div>
