@@ -139,12 +139,12 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full max-w-[512px] aspect-square mx-auto"
+                  className="relative w-full max-w-[512px] aspect-square mx-auto overflow-hidden rounded-lg bg-gray-200"
                 >
                   <img
                     src={image}
                     alt="Uploaded"
-                    className="w-full h-full object-cover rounded-lg"
+                    className="absolute top-1/2 left-1/2 w-auto h-full max-w-none transform -translate-x-1/2 -translate-y-1/2 object-cover"
                   />
                   <img
                     src="/raising-overlay.png"
@@ -152,6 +152,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
                 </div>
+
                 <button
                   onClick={removeImage}
                   className="mt-4 text-red-500 text-sm hover:text-red-700"
