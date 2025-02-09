@@ -1,26 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Nunito } from "next/font/google";
-import { Nunito_Sans } from "next/font/google";
+import { Nunito } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const nunitoSans = Nunito_Sans({
+const nunitoSans = Nunito({
   variable: "--font-nunito-sans",
   subsets: ["latin"],
-})
+});
 
 export const metadata: Metadata = {
-  title: "Raising",
-  description: "Raising funds for your startup? Let VCs know you're raising and close rounds faster.",
+  title: "Raising F(r)ame",
+  description:
+    "Raising funds for your startup? Let VCs know you're raising and close rounds faster.",
 };
 
 export default function RootLayout({
@@ -66,6 +56,14 @@ export default function RootLayout({
               className="underline hover:text-gray-800 transition-colors"
             >
               oliver
+            </a>
+            , built by{" "}
+            <a
+              href="https://linkedin.com/in/jackietanyen"
+              target="_blank"
+              className="underline hover:text-gray-800 transition-colors"
+            >
+              jackie
             </a>
           </p>
         </footer>
