@@ -26,9 +26,24 @@ export default function Home() {
 
   const generateImage = async () => {
     if (imageContainerRef.current) {
-      const canvas = await html2canvas(imageContainerRef.current, {
+      const container = imageContainerRef.current;
+      const size = 512; // Fixed size for final image
+
+      // ✅ Temporarily set explicit dimensions for capture
+      container.style.width = `${size}px`;
+      container.style.height = `${size}px`;
+
+      // Capture the image
+      const canvas = await html2canvas(container, {
         backgroundColor: null,
+        width: size,
+        height: size,
       });
+
+      // Reset container size after capture
+      container.style.width = "";
+      container.style.height = "";
+
       const imageData = canvas.toDataURL("image/png");
       sessionStorage.setItem("generatedImage", imageData);
       router.push("/success");
@@ -44,7 +59,7 @@ export default function Home() {
           #Raising F(r)ame
         </h2>
         <p className="text-base sm:text-2xl text-gray-500 mb-8">
-          let VCs know you're raising. close rounds faster.
+          Let VCs know you're raising. Close rounds faster.
         </p>
         <button
           onClick={openModal}
@@ -139,7 +154,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full max-w-[512px] aspect-square mx-auto overflow-hidden rounded-lg bg-gray-200"
+                  className="relative w-full max-w-[512px] aspect-square mx-auto overflow-hidden bg-gray-200"
                 >
                   <img
                     src={image}
