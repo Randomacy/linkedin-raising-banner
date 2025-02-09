@@ -28,6 +28,7 @@ export default function Home() {
     if (imageContainerRef.current) {
       const canvas = await html2canvas(imageContainerRef.current, {
         backgroundColor: null,
+        scale: 3, // Adjust the scale factor as needed
       });
       const imageData = canvas.toDataURL("image/png");
       sessionStorage.setItem("generatedImage", imageData);
@@ -44,7 +45,7 @@ export default function Home() {
           #Raising F(r)ame
         </h2>
         <p className="text-base sm:text-2xl text-gray-500 mb-8">
-          let VCs know you're raising. close rounds faster.
+          Let VCs know you're raising. Close rounds faster.
         </p>
         <button
           onClick={openModal}
@@ -69,6 +70,7 @@ export default function Home() {
           Upload profile pic
         </button>
       </div>
+
       <div className="max-w-lg mx-auto sm:px-0">
         <div className="flex flex-col gap-8">
           <img
@@ -138,14 +140,12 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full max-w-[512px] mx-auto overflow-hidden rounded-lg bg-gray-200"
-                  style={{ aspectRatio: "1 / 1" }} // Enforces a square aspect ratio
+                  className="relative w-full max-w-[300px] md:max-w-[200px] aspect-square mx-auto overflow-hidden bg-gray-200 rounded-lg"
                 >
                   <img
                     src={image}
                     alt="Uploaded"
                     className="absolute inset-0 w-full h-full object-cover"
-                    style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                   <img
                     src="/raising-overlay.png"
