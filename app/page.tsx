@@ -26,23 +26,23 @@ export default function Home() {
 
   const generateImage = async () => {
     if (imageContainerRef.current) {
-      const container = imageContainerRef.current;
-      const size = 512; // Fixed size for final image
+      // ✅ Clone the image container to avoid affecting the UI
+      const clone = imageContainerRef.current.cloneNode(true) as HTMLDivElement;
+      clone.style.width = "512px";
+      clone.style.height = "512px";
+      clone.style.position = "absolute";
+      clone.style.top = "-9999px"; // Hide clone off-screen
+      document.body.appendChild(clone);
 
-      // ✅ Temporarily set explicit dimensions for capture
-      container.style.width = `${size}px`;
-      container.style.height = `${size}px`;
-
-      // Capture the image
-      const canvas = await html2canvas(container, {
+      // Capture the hidden clone
+      const canvas = await html2canvas(clone, {
         backgroundColor: null,
-        width: size,
-        height: size,
+        width: 512,
+        height: 512,
       });
 
-      // Reset container size after capture
-      container.style.width = "";
-      container.style.height = "";
+      // Clean up after capture
+      document.body.removeChild(clone);
 
       const imageData = canvas.toDataURL("image/png");
       sessionStorage.setItem("generatedImage", imageData);
@@ -106,7 +106,7 @@ export default function Home() {
           onClick={closeModal}
         >
           <div
-            className="max-h-[95vh] w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-300"
+            className="max-h-[95vh] w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-300 relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
