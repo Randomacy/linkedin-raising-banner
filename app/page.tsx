@@ -102,8 +102,8 @@ export default function Home() {
               &times;
             </button>
 
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-              Upload Profile Picture
+            <h3 className="text-lg font-bold text-gray-900 mb-6 text-center">
+              Upload profile picture. Make sure it's square!
             </h3>
 
             {!image ? (
@@ -140,7 +140,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full max-w-[300px] md:max-w-[200px] aspect-square mx-auto overflow-hidden bg-gray-200 rounded-lg"
+                  className="relative w-full max-w-[300px] md:max-w-[200px] aspect-square mx-auto overflow-hidden bg-gray-200"
                 >
                   <img
                     src={image}
