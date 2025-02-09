@@ -26,24 +26,9 @@ export default function Home() {
 
   const generateImage = async () => {
     if (imageContainerRef.current) {
-      // ✅ Clone the image container to avoid affecting the UI
-      const clone = imageContainerRef.current.cloneNode(true) as HTMLDivElement;
-      clone.style.width = "512px";
-      clone.style.height = "512px";
-      clone.style.position = "absolute";
-      clone.style.top = "-9999px"; // Hide clone off-screen
-      document.body.appendChild(clone);
-
-      // Capture the hidden clone
-      const canvas = await html2canvas(clone, {
+      const canvas = await html2canvas(imageContainerRef.current, {
         backgroundColor: null,
-        width: 512,
-        height: 512,
       });
-
-      // Clean up after capture
-      document.body.removeChild(clone);
-
       const imageData = canvas.toDataURL("image/png");
       sessionStorage.setItem("generatedImage", imageData);
       router.push("/success");
@@ -59,7 +44,7 @@ export default function Home() {
           #Raising F(r)ame
         </h2>
         <p className="text-base sm:text-2xl text-gray-500 mb-8">
-          Let VCs know you're raising. Close rounds faster.
+          let VCs know you're raising. close rounds faster.
         </p>
         <button
           onClick={openModal}
@@ -84,8 +69,7 @@ export default function Home() {
           Upload profile pic
         </button>
       </div>
-
-      <div className="max-w-lg mx-auto sm:px-2">
+      <div className="max-w-lg mx-auto sm:px-0">
         <div className="flex flex-col gap-8">
           <img
             src="/jackie-raising-banner.png"
@@ -106,7 +90,7 @@ export default function Home() {
           onClick={closeModal}
         >
           <div
-            className="max-h-[95vh] w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-300 relative"
+            className="max-h-[95vh] w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 border-2 border-gray-300"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -154,12 +138,12 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-full max-w-[512px] aspect-square mx-auto overflow-hidden bg-gray-200"
+                  className="relative w-[512px] h-[512px] mx-auto"
                 >
                   <img
                     src={image}
                     alt="Uploaded"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="w-full h-full object-cover rounded-lg"
                   />
                   <img
                     src="/raising-overlay.png"
@@ -167,7 +151,6 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
                 </div>
-
                 <button
                   onClick={removeImage}
                   className="mt-4 text-red-500 text-sm hover:text-red-700"
