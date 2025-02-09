@@ -138,12 +138,14 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-[512px] h-[512px] mx-auto"
+                  className="relative w-full max-w-[512px] mx-auto overflow-hidden rounded-lg bg-gray-200"
+                  style={{ aspectRatio: "1 / 1" }} // Enforces a square aspect ratio
                 >
                   <img
                     src={image}
                     alt="Uploaded"
-                    className="w-full h-full object-cover rounded-lg"
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectFit: "cover", objectPosition: "center" }}
                   />
                   <img
                     src="/raising-overlay.png"
@@ -151,6 +153,7 @@ export default function Home() {
                     className="absolute inset-0 w-full h-full object-cover pointer-events-none"
                   />
                 </div>
+
                 <button
                   onClick={removeImage}
                   className="mt-4 text-red-500 text-sm hover:text-red-700"
