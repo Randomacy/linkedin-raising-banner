@@ -10,7 +10,7 @@ export default function Home() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => {
     setIsModalOpen(false);
-    setImage(null); // Reset image when closing modal
+    setImage(null);
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +20,10 @@ export default function Home() {
       reader.onloadend = () => setImage(reader.result as string);
       reader.readAsDataURL(file);
     }
+  };
+
+  const removeImage = () => {
+    setImage(null);
   };
 
   const downloadImage = async () => {
@@ -133,25 +137,33 @@ export default function Home() {
                     d="M3 15a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4M12 3v12"
                   />
                 </svg>
-                <p className="text-gray-600 mt-2">
-                  Drag and drop your profile picture here, or click to upload
-                </p>
+                <p className="text-gray-600 mt-2">Click to upload</p>
               </div>
             ) : (
-              <div
-                ref={imageContainerRef}
-                className="relative w-[512px] h-[512px] mx-auto"
-              >
-                <img
-                  src={image}
-                  alt="Uploaded"
-                  className="w-full h-full object-cover rounded-lg"
-                />
-                <img
-                  src="/raising-overlay.png"
-                  alt="Overlay"
-                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                />
+              <div className="flex flex-col items-center">
+                <div
+                  ref={imageContainerRef}
+                  className="relative w-[512px] h-[512px] mx-auto"
+                >
+                  <img
+                    src={image}
+                    alt="Uploaded"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <img
+                    src="/raising-overlay.png"
+                    alt="Overlay"
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                  />
+                </div>
+
+                {/* Remove Button */}
+                <button
+                  onClick={removeImage}
+                  className="mt-4 text-red-500 text-sm underline hover:text-red-700"
+                >
+                  ✖ Remove
+                </button>
               </div>
             )}
 
