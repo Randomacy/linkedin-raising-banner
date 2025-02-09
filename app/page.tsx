@@ -70,20 +70,6 @@ export default function Home() {
         </button>
       </div>
 
-      {/* <div className="max-w-lg mx-auto">
-        <div className="flex flex-col gap-8">
-          <img
-            src="/jackie-raising-banner.png"
-            alt="Jackie"
-            className="w-[512px] h-[186px] object-cover rounded-lg"
-          />
-          <img
-            src="/kenneth-raising-banner.png"
-            alt="Kenneth"
-            className="w-[512px] h-[186px] object-cover rounded-lg"
-          />
-        </div>
-      </div> */}
       <div className="max-w-lg mx-auto sm:px-2">
         <div className="flex flex-col gap-8">
           <img
@@ -153,7 +139,7 @@ export default function Home() {
               <div className="flex flex-col items-center">
                 <div
                   ref={imageContainerRef}
-                  className="relative w-[512px] h-[512px] mx-auto"
+                  className="relative w-full max-w-[512px] aspect-square mx-auto"
                 >
                   <img
                     src={image}
