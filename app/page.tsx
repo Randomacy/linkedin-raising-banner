@@ -1,11 +1,38 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import html2canvas from "html2canvas";
 
 export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const imageContainerRef = useRef<HTMLDivElement>(null);
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setImage(null); // Reset image when closing modal
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setImage(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const downloadImage = async () => {
+    if (imageContainerRef.current) {
+      const canvas = await html2canvas(imageContainerRef.current, {
+        backgroundColor: null,
+      });
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "profile_with_overlay.png";
+      link.click();
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -59,8 +86,14 @@ export default function Home() {
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-start md:items-center justify-center p-4 z-50">
-          <div className="max-h-[90vh] overflow-y-auto flex flex-col bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 relative">
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-start md:items-center justify-center p-4 z-50"
+          onClick={closeModal}
+        >
+          <div
+            className="max-h-[90vh] overflow-y-auto flex flex-col bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Close Button */}
             <button
               onClick={closeModal}
@@ -73,56 +106,64 @@ export default function Home() {
               1. Upload Profile Picture
             </h3>
 
-            {/* Upload Box */}
-            <div className="bg-gray-100 p-6 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-12 h-12 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
+            {/* Upload Section */}
+            {!image ? (
+              <div
+                className="bg-gray-100 p-6 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer"
+                onClick={() => document.getElementById("fileInput")?.click()}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M3 15a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4M12 3v12"
+                <input
+                  type="file"
+                  id="fileInput"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
                 />
-              </svg>
-              <p className="text-gray-600 mt-2">
-                Drag and drop your profile picture here, or
-              </p>
-              <label className="inline-block mt-2 cursor-pointer text-indigo-500 underline">
-                <input type="file" className="hidden" />
-                browse to upload
-              </label>
-            </div>
-
-            {/* Payment Section */}
-            <h3 className="text-xl font-bold text-gray-900 mt-6 mb-2">
-              2. Choose How Much to Pay
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Help us increase our MRR 😊
-            </p>
-            <div className="flex gap-2">
-              {["$0", "$2", "$5", "$10"].map((amount) => (
-                <button
-                  key={amount}
-                  className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 rounded-md transition"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-12 h-12 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  {amount}
-                </button>
-              ))}
-            </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 15a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4M12 3v12"
+                  />
+                </svg>
+                <p className="text-gray-600 mt-2">
+                  Drag and drop your profile picture here, or click to upload
+                </p>
+              </div>
+            ) : (
+              <div
+                ref={imageContainerRef}
+                className="relative w-[512px] h-[512px] mx-auto"
+              >
+                <img
+                  src={image}
+                  alt="Uploaded"
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <img
+                  src="/raising-overlay.png"
+                  alt="Overlay"
+                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                />
+              </div>
+            )}
 
-            {/* Generate Button */}
-            <button
-              disabled
-              className="w-full mt-4 bg-gray-200 text-gray-400 cursor-not-allowed py-3 rounded-md font-bold"
-            >
-              Generate
-            </button>
+            {/* Download Button */}
+            {image && (
+              <button
+                onClick={downloadImage}
+                className="w-full mt-4 bg-gray-900 text-white py-3 rounded-md font-bold hover:bg-gray-800 transition"
+              >
+                Download Image
+              </button>
+            )}
           </div>
         </div>
       )}
