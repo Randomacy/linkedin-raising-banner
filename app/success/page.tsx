@@ -33,7 +33,7 @@ export default function Success() {
         <img
           src={generatedImage}
           alt="Generated"
-          className="w-[300px] h-[300px] rounded-full mb-6"
+          className="w-[300px] h-[300px] max-w-[300px] max-h-[300px] object-cover rounded-full mb-6"
         />
       )}
 
