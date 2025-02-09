@@ -70,7 +70,7 @@ export default function Home() {
         </button>
       </div>
 
-      <div className="max-w-lg mx-auto">
+      {/* <div className="max-w-lg mx-auto">
         <div className="flex flex-col gap-8">
           <img
             src="/jackie-raising-banner.png"
@@ -81,6 +81,20 @@ export default function Home() {
             src="/kenneth-raising-banner.png"
             alt="Kenneth"
             className="w-[512px] h-[186px] object-cover rounded-lg"
+          />
+        </div>
+      </div> */}
+      <div className="max-w-lg mx-auto sm:px-2">
+        <div className="flex flex-col gap-8">
+          <img
+            src="/jackie-raising-banner.png"
+            alt="Jackie"
+            className="w-full max-w-[512px] h-auto object-cover rounded-lg mx-auto"
+          />
+          <img
+            src="/kenneth-raising-banner.png"
+            alt="Kenneth"
+            className="w-full max-w-[512px] h-auto object-cover rounded-lg mx-auto"
           />
         </div>
       </div>
